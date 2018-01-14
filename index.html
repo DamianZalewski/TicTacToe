@@ -1,0 +1,669 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background-color: darkgray;
+        }
+
+        canvas {
+            border: 5px solid white;
+            margin-top: 10%;
+         
+            
+        }
+    
+
+    </style>
+</head>
+
+<body>
+
+    <canvas></canvas>
+
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = 1000;
+        canvas.height = 500;
+
+        cw = canvas.width;
+        ch = canvas.height;
+
+
+        // main menu variables
+        const buttonTop = 150;
+        const buttonWidth = 400;
+        const buttonHeight = 100;
+        const fontSize = 50;
+        const menuBoxX = cw / 2 - buttonWidth / 2;
+        var boxColorTop = "white";
+        var boxColorBot = "white";
+        var boxTextColorTop = "black";
+        var boxTextColorBot = "black";
+        // -----------------
+        topCanvas = canvas.offsetTop;
+        leftCanvas = canvas.offsetLeft;
+
+        let stage = 1;
+        //----------
+        var IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var squareTurn = [null, null, null, null, null, null, null, null, null];
+
+        var turnSide = true; // true - circle , false - x
+        //-------------
+        var scoreX = 0;
+        var scoreY = 0;
+        //-------------
+        var firstDelay = true;
+        //-------------
+        var xColor = "green";
+        var oColor = "red";
+
+        function board() {
+
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, cw, ch);
+
+        }
+
+        function mainMenu() {
+
+            ctx.fillStyle = "white";
+            ctx.font = "50px Arial";
+
+
+            ctx.textAlign = "center";
+            ctx.fillText("Tic Tac Toe", cw / 2, 100);
+
+            ctx.fillStyle = boxColorTop;
+            ctx.fillRect(menuBoxX, buttonTop, buttonWidth, buttonHeight);
+            ctx.fillStyle = boxColorBot;
+            ctx.fillRect(menuBoxX, buttonTop + buttonHeight + 50, buttonWidth, buttonHeight);
+
+            ctx.fillStyle = boxTextColorTop;
+            ctx.font = fontSize + "px Arial";
+            ctx.fillText("Player vs Player", cw / 2, buttonTop + buttonHeight / 2 + 20);
+
+            ctx.fillStyle = boxTextColorBot;
+            ctx.fillText("Player vs Comp", cw / 2, buttonTop + buttonHeight + fontSize + 70);
+
+
+
+        }
+
+        function mainMenuOption(e) {
+            var flagA = false;
+            var flagB = false;
+            if (e.clientX >= leftCanvas + menuBoxX &&
+                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
+                e.clientY >= topCanvas + buttonTop &&
+                e.clientY <= topCanvas + buttonTop + buttonHeight
+            ) {
+                boxColorTop = "red";
+                boxTextColorTop = "white";
+                
+                flagA = true;
+
+            } else {
+                boxColorTop = "white";
+                boxTextColorTop = "black";
+                flagA = false;
+          
+
+            }
+
+            if (e.clientX >= leftCanvas + menuBoxX &&
+                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
+                e.clientY >= topCanvas + buttonTop + buttonHeight + 50 &&
+                e.clientY <= topCanvas + buttonTop + buttonHeight * 2 + 50
+            ) {
+                boxColorBot = "red";
+                boxTextColorBot = "white";
+                flagB = true;
+                
+
+
+            } else {
+                boxColorBot = "white";
+                boxTextColorBot = "black";
+                flagB = false;
+                
+
+            }
+            if(flagA || flagB) {
+                canvas.style.cursor = "pointer";
+            }
+            else
+                {      
+                          canvas.style.cursor = "context-menu";
+                }
+
+        }
+
+        function changeStage(e) {
+            if (e.clientX >= leftCanvas + menuBoxX &&
+                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
+                e.clientY >= topCanvas + buttonTop &&
+                e.clientY <= topCanvas + buttonTop + buttonHeight
+            ) {
+                stage = 2;
+
+            }
+
+
+            if (e.clientX >= leftCanvas + menuBoxX &&
+                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
+                e.clientY >= topCanvas + buttonTop + buttonHeight + 50 &&
+                e.clientY <= topCanvas + buttonTop + buttonHeight * 2 + 50
+            ) {
+                stage = 3;
+
+            }
+
+        }
+
+        function gameBoard() {
+            ctx.fillStyle = "white";
+            //pionowe
+            ctx.fillRect(cw / 2 - 60, 60, 5, ch - 140);
+            ctx.fillRect(cw / 2 + 60, 60, 5, ch - 140);
+            //poziome
+            ctx.fillRect(cw / 2 - 170, ch / 2 - 60, cw / 2 - 150, 5);
+            ctx.fillRect(cw / 2 - 170, ch / 2 + 60, cw / 2 - 150, 5);
+        }
+
+        function chooseSquare(e) {
+
+
+            // first 3 square
+            if (e.clientX >= leftCanvas + cw / 2 - 165 &&
+                e.clientX <= leftCanvas + cw / 2 - 60 &&
+                e.clientY >= topCanvas + 60 &&
+                e.clientY <= topCanvas + ch / 2 - 60
+            ) {
+                if (IconTab[0] == 0) {
+                    //   console.log("pole 1");
+
+                    IconTab[0] = 1;
+
+                    turnSide = !turnSide;
+                }
+            } else
+            if (e.clientX >= leftCanvas + cw / 2 - 60 &&
+                e.clientX <= leftCanvas + cw / 2 + 60 &&
+                e.clientY >= topCanvas + 60 &&
+                e.clientY <= topCanvas + ch / 2 - 60
+            ) {
+                if (IconTab[1] == 0) {
+                    //   console.log("pole 2");
+                    IconTab[1] = 1;
+
+                    turnSide = !turnSide;
+                }
+            } else
+            if (e.clientX >= leftCanvas + cw / 2 + 65 &&
+                e.clientX <= leftCanvas + cw / 2 + 185 &&
+                e.clientY >= topCanvas + 60 &&
+                e.clientY <= topCanvas + ch / 2 - 60
+            ) {
+                if (IconTab[2] == 0) {
+                    //   console.log("pole 3");
+                    IconTab[2] = 1;
+                    turnSide = !turnSide;
+                }
+            }
+
+            // second 3 square
+            else if (e.clientX >= leftCanvas + cw / 2 - 165 &&
+                e.clientX <= leftCanvas + cw / 2 - 60 &&
+                e.clientY >= topCanvas + ch / 2 - 60 &&
+                e.clientY <= topCanvas + ch / 2 + 60
+            ) {
+                if (IconTab[3] == 0) {
+                    //  console.log("pole 4");
+                    IconTab[3] = 1;
+                    turnSide = !turnSide;
+                }
+            } else
+            if (e.clientX >= leftCanvas + cw / 2 - 60 &&
+                e.clientX <= leftCanvas + cw / 2 + 60 &&
+                e.clientY >= topCanvas + ch / 2 - 60 &&
+                e.clientY <= topCanvas + ch / 2 + 60
+            ) {
+                if (IconTab[4] == 0) {
+                    //   console.log("pole 5");
+                    IconTab[4] = 1;
+                    turnSide = !turnSide;
+                }
+            } else
+            if (e.clientX >= leftCanvas + cw / 2 + 65 &&
+                e.clientX <= leftCanvas + cw / 2 + 185 &&
+                e.clientY >= topCanvas + ch / 2 - 60 &&
+                e.clientY <= topCanvas + ch / 2 + 60
+            ) {
+                if (IconTab[5] == 0) {
+                    //  console.log("pole 6");
+                    IconTab[5] = 1;
+                    turnSide = !turnSide;
+                }
+            }
+
+            // third 3 square
+            else if (e.clientX >= leftCanvas + cw / 2 - 165 &&
+                e.clientX <= leftCanvas + cw / 2 - 60 &&
+                e.clientY >= topCanvas + ch / 2 + 60 &&
+                e.clientY <= topCanvas + ch / 2 + 200
+            ) {
+                if (IconTab[6] == 0) {
+                    //   console.log("pole 7");
+                    IconTab[6] = 1;
+                    turnSide = !turnSide;
+                }
+            } else
+            if (e.clientX >= leftCanvas + cw / 2 - 60 &&
+                e.clientX <= leftCanvas + cw / 2 + 60 &&
+                e.clientY >= topCanvas + ch / 2 + 60 &&
+                e.clientY <= topCanvas + ch / 2 + 200
+            ) {
+                if (IconTab[7] == 0) {
+                    // console.log("pole 8");
+                    IconTab[7] = 1;
+                    turnSide = !turnSide;
+                }
+            } else
+            if (e.clientX >= leftCanvas + cw / 2 + 65 &&
+                e.clientX <= leftCanvas + cw / 2 + 185 &&
+                e.clientY >= topCanvas + ch / 2 + 60 &&
+                e.clientY <= topCanvas + ch / 2 + 200
+            ) {
+                if (IconTab[8] == 0) {
+                    // console.log("pole 9");
+                    IconTab[8] = 1;
+                    turnSide = !turnSide;
+                }
+            }
+
+            // back to main menu button
+
+            if (e.clientX >= leftCanvas + 30 &&
+                e.clientX <= leftCanvas + 180 &&
+                e.clientY >= topCanvas + ch - 70 &&
+                e.clientY <= topCanvas + ch
+            ) goBack();
+
+            //console.log(squareTurn);
+
+
+        }
+
+        function drawIcon() {
+            ctx.fillStyle = "white";
+            ctx.font = "80px Arial";
+            ctx.textAlign = "center";
+
+
+            //first 3 square
+            if (IconTab[0] == 1) {
+                if (squareTurn[0] == null) {
+                    squareTurn[0] = turnSide;
+                }
+
+                if (squareTurn[0]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2 - 120, 150)
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2 - 120, 150)
+                }
+
+            }
+            if (IconTab[1] == 1) {
+                if (squareTurn[1] == null) {
+                    squareTurn[1] = turnSide;
+                }
+
+
+                if (squareTurn[1]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2, 150);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2, 150);
+                }
+            }
+            if (IconTab[2] == 1) {
+                if (squareTurn[2] == null) {
+                    squareTurn[2] = turnSide;
+                }
+
+
+
+                if (squareTurn[2]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2 + 120, 150);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2 + 120, 150);
+                }
+            }
+            //second 3 square
+            if (IconTab[3] == 1) {
+                if (squareTurn[3] == null) {
+                    squareTurn[3] = turnSide;
+                }
+
+
+                if (squareTurn[3]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2 - 120, 280);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2 - 120, 280);
+                }
+            }
+            if (IconTab[4] == 1) {
+                if (squareTurn[4] == null) {
+                    squareTurn[4] = turnSide;
+                }
+
+
+                if (squareTurn[4]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2, 280);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2, 280);
+                }
+            }
+            if (IconTab[5] == 1) {
+                if (squareTurn[5] == null) {
+                    squareTurn[5] = turnSide;
+                }
+
+
+                if (squareTurn[5]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2 + 120, 280);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2 + 120, 280);
+                }
+            }
+            //third 3 square
+            if (IconTab[6] == 1) {
+                if (squareTurn[6] == null) {
+                    squareTurn[6] = turnSide;
+                }
+
+
+                if (squareTurn[6]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2 - 120, 400);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2 - 120, 400);
+                }
+            }
+            if (IconTab[7] == 1) {
+                if (squareTurn[7] == null) {
+                    squareTurn[7] = turnSide;
+                }
+
+
+                if (squareTurn[7]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2, 400);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2, 400);
+                }
+            }
+            if (IconTab[8] == 1) {
+                if (squareTurn[8] == null) {
+                    squareTurn[8] = turnSide;
+                }
+
+
+
+                if (squareTurn[8]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", cw / 2 + 120, 400);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", cw / 2 + 120, 400);
+                }
+            }
+        }
+
+
+        function topMenu() {
+            ctx.fillStyle = "white";
+            ctx.font = "36px Arial";
+
+            if (!turnSide)
+                ctx.fillText("runda gracza : X", cw / 2, 40);
+            else
+                ctx.fillText("runda gracza : O", cw / 2, 40);
+
+        }
+
+        function showScore() {
+
+            ctx.font = "72px Arial";
+            ctx.fillStyle = xColor;
+            ctx.fillText("Gracz X", 150, 100);
+            ctx.fillStyle = oColor;
+            ctx.fillText("Gracz O", cw - 150, 100);
+            ctx.fillStyle = 'white';
+            ctx.font = "128px Arial";
+            ctx.fillText(scoreX, 150, 300);
+            ctx.fillText(scoreY, cw - 150, 300);
+
+        }
+
+        function winner(con) {
+            con ? scoreX++ : scoreY++;
+            IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+            squareTurn = [null, null, null, null, null, null, null, null, null];
+
+
+
+
+        }
+
+        function checkWin() {
+            var con = true;
+
+            if (squareTurn[0] == con && squareTurn[1] == con && squareTurn[2] == con) winner(con);
+            else
+            if (squareTurn[3] == con && squareTurn[4] == con && squareTurn[5] == con) winner(con);
+            else
+            if (squareTurn[6] == con && squareTurn[7] == con && squareTurn[8] == con) winner(con);
+
+            else
+            if (squareTurn[0] == con && squareTurn[3] == con && squareTurn[6] == con) winner(con);
+            else
+            if (squareTurn[1] == con && squareTurn[4] == con && squareTurn[7] == con) winner(con);
+            else
+            if (squareTurn[2] == con && squareTurn[5] == con && squareTurn[8] == con) winner(con);
+
+            else
+            if (squareTurn[0] == con && squareTurn[4] == con && squareTurn[8] == con) winner(con);
+            else
+            if (squareTurn[2] == con && squareTurn[4] == con && squareTurn[6] == con) winner(con);
+
+            con = false;
+
+            if (squareTurn[0] == con && squareTurn[1] == con && squareTurn[2] == con) winner(con);
+            else
+            if (squareTurn[3] == con && squareTurn[4] == con && squareTurn[5] == con) winner(con);
+            else
+            if (squareTurn[6] == con && squareTurn[7] == con && squareTurn[8] == con) winner(con);
+
+            else
+            if (squareTurn[0] == con && squareTurn[3] == con && squareTurn[6] == con) winner(con);
+            else
+            if (squareTurn[1] == con && squareTurn[4] == con && squareTurn[7] == con) winner(con);
+            else
+            if (squareTurn[2] == con && squareTurn[5] == con && squareTurn[8] == con) winner(con);
+
+            else
+            if (squareTurn[0] == con && squareTurn[4] == con && squareTurn[8] == con) winner(con);
+            else
+            if (squareTurn[2] == con && squareTurn[4] == con && squareTurn[6] == con) winner(con);
+            else {
+                var check = true;
+                for (var i = 0; i <= 8; i++) {
+                    squareTurn[i] == null ? check = false : null;
+                    // console.log(check);
+
+                }
+                if (check) {
+                    IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    squareTurn = [null, null, null, null, null, null, null, null, null];
+                }
+            }
+
+
+        }
+
+        function drawBackIcon() {
+            ctx.fillStyle = 'white';
+
+            ctx.font = "36px Arial";
+            
+            ctx.textAlign = "left";
+            ctx.fillText("< MENU", 30, ch - 30);
+        }
+
+        function goBack() {
+            stage = 1;
+            IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+            squareTurn = [null, null, null, null, null, null, null, null, null];
+            scoreX = 0;
+            scoreY = 0;
+            turnSide = 0;
+            firstDelay = true;
+            canvas.removeEventListener("mousedown", chooseSquare);
+
+        }
+
+        function computerAI() {
+
+            var checkSlot = false;
+            for (var i = 0; i <= 8; i++) {
+                if (IconTab[i] == 0) {
+                    checkSlot = true;
+                }
+            }
+
+            while (checkSlot) {
+                var random = Math.floor(Math.random() * 8) + 0;
+
+                // console.log(random);
+
+                if (IconTab[random] == 0) {
+                    IconTab[random] = 1;
+                    turnSide = !turnSide;
+
+                    break;
+
+                }
+
+
+            }
+
+        }
+
+        function setEvents() {
+            canvas.removeEventListener("mousedown", changeStage);
+            canvas.addEventListener("click", chooseSquare);
+
+        }
+
+
+
+        function game() {
+            // console.log(stage);
+            
+            //console.log(firstDelay);
+           
+            
+            if (stage == 1) {
+                board();
+                // main menu
+                mainMenu();
+      
+                canvas.addEventListener("mousemove", mainMenuOption);
+                canvas.addEventListener("mousedown", changeStage);
+                firstDelay = true;
+
+            } else if (stage == 2) {
+                if (firstDelay == true) {
+                    setTimeout(setEvents, 1000);
+                    firstDelay = false;
+                }
+                
+                board();
+                //player vs player
+                drawBackIcon();
+                gameBoard();
+                drawIcon();
+                topMenu();
+                showScore();
+                checkWin();
+
+
+
+
+            } else // stage == 3
+            {
+                canvas.removeEventListener("mousedown", changeStage);
+                board();
+                //player vs computer
+                drawBackIcon();
+                gameBoard();
+                drawIcon();
+                topMenu();
+                showScore();
+                checkWin();
+                if (turnSide == true) {
+
+                    canvas.addEventListener("click", chooseSquare);
+
+
+
+                }
+                if (turnSide == false) {
+                    canvas.removeEventListener("click", chooseSquare);
+                    turnSide = null;
+
+                    setTimeout(computerAI, 800);
+
+                }
+
+                //  console.log(turnSide)
+
+
+            }
+
+
+
+
+        }
+
+
+        setInterval(game, 1000 / 60);
+
+    </script>
+</body>
+
+</html>
