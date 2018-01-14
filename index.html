@@ -3,22 +3,20 @@
 
 <head>
     <title>Tic Tac Toe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
 
+            padding: 0;
+            margin: 0;
             background-color: darkgray;
+            overflow: hidden;
         }
 
         canvas {
-            border: 5px solid white;
-            margin-top: 10%;
-         
-            
+            width: 100vw;
+            height: 100vh;
         }
-    
 
     </style>
 </head>
@@ -31,19 +29,19 @@
         const canvas = document.querySelector('canvas');
         const ctx = canvas.getContext('2d');
 
-        canvas.width = 1000;
-        canvas.height = 500;
+        console.log(screen.width);
+        canvas.width = screen.width;
+        canvas.height = screen.height;
 
         cw = canvas.width;
+
         ch = canvas.height;
+        console.log("cw :" + cw);
+        console.log("ch :" + ch);
 
 
         // main menu variables
-        const buttonTop = 150;
-        const buttonWidth = 400;
-        const buttonHeight = 100;
-        const fontSize = 50;
-        const menuBoxX = cw / 2 - buttonWidth / 2;
+
         var boxColorTop = "white";
         var boxColorBot = "white";
         var boxTextColorTop = "black";
@@ -67,6 +65,29 @@
         var xColor = "green";
         var oColor = "red";
 
+
+        //responsive
+        var mainTitleSize,
+            menuBoxX,
+            menuBoxY,
+            buttonWidth,
+            buttonHeight,
+            fontSize;
+        //Nokia lumia 520
+        if (cw >= 320 && ch >= 533) { /// !!!!!!!!!!!!!! >>>>>>>>>  !!!!!!!!!!!!!!!!!
+            mainTitleSize = 45 + "px Arial";
+            buttonWidth = 250;
+            buttonHeight = 70;  
+            menuBoxX = cw/2-buttonWidth/2;
+            menuBoxY = 170;
+            fontSize = 30;
+
+
+
+        }
+
+
+        // create start board fill by a black color;
         function board() {
 
             ctx.fillStyle = 'black';
@@ -74,32 +95,42 @@
 
         }
 
+        // draw main menu buttons and make their hover state
         function mainMenu() {
 
             ctx.fillStyle = "white";
-            ctx.font = "50px Arial";
+            ctx.font = mainTitleSize;
 
 
             ctx.textAlign = "center";
             ctx.fillText("Tic Tac Toe", cw / 2, 100);
 
             ctx.fillStyle = boxColorTop;
-            ctx.fillRect(menuBoxX, buttonTop, buttonWidth, buttonHeight);
+            ctx.fillRect(menuBoxX, menuBoxY, buttonWidth, buttonHeight);
             ctx.fillStyle = boxColorBot;
-            ctx.fillRect(menuBoxX, buttonTop + buttonHeight + 50, buttonWidth, buttonHeight);
+            ctx.fillRect(menuBoxX, menuBoxY + buttonHeight*2, buttonWidth, buttonHeight);
 
             ctx.fillStyle = boxTextColorTop;
             ctx.font = fontSize + "px Arial";
-            ctx.fillText("Player vs Player", cw / 2, buttonTop + buttonHeight / 2 + 20);
+            ctx.fillText("Player vs Player", cw / 2, menuBoxY + buttonHeight - fontSize*0.8);
 
             ctx.fillStyle = boxTextColorBot;
-            ctx.fillText("Player vs Comp", cw / 2, buttonTop + buttonHeight + fontSize + 70);
+            ctx.fillText("Player vs Comp", cw / 2, menuBoxY + buttonHeight*3 - fontSize*0.8);
 
 
 
         }
 
         function mainMenuOption(e) {
+            // -----------------------
+            console.log('-------------test------------');
+            console.log("leftCanvas" + leftCanvas);
+            console.log("menuBoxX :" + menuBoxX);
+            console.log("leftCanvas + menuBoxX :" + (leftCanvas + menuBoxX));
+
+            console.log("e.clientX :" + e.clientX);
+            //-----------------------
+
             var flagA = false;
             var flagB = false;
             if (e.clientX >= leftCanvas + menuBoxX &&
@@ -109,14 +140,14 @@
             ) {
                 boxColorTop = "red";
                 boxTextColorTop = "white";
-                
+
                 flagA = true;
 
             } else {
                 boxColorTop = "white";
                 boxTextColorTop = "black";
                 flagA = false;
-          
+
 
             }
 
@@ -128,23 +159,21 @@
                 boxColorBot = "red";
                 boxTextColorBot = "white";
                 flagB = true;
-                
+
 
 
             } else {
                 boxColorBot = "white";
                 boxTextColorBot = "black";
                 flagB = false;
-                
+
 
             }
-            if(flagA || flagB) {
+            if ((flagA || flagB) && stage == 1) {
                 canvas.style.cursor = "pointer";
+            } else {
+                canvas.style.cursor = "context-menu";
             }
-            else
-                {      
-                          canvas.style.cursor = "context-menu";
-                }
 
         }
 
@@ -539,7 +568,7 @@
             ctx.fillStyle = 'white';
 
             ctx.font = "36px Arial";
-            
+
             ctx.textAlign = "left";
             ctx.fillText("< MENU", 30, ch - 30);
         }
@@ -550,9 +579,10 @@
             squareTurn = [null, null, null, null, null, null, null, null, null];
             scoreX = 0;
             scoreY = 0;
-            turnSide = 0;
+            turnSide = true;
             firstDelay = true;
             canvas.removeEventListener("mousedown", chooseSquare);
+            clearTimeout(setEvents);
 
         }
 
@@ -593,25 +623,26 @@
 
         function game() {
             // console.log(stage);
-            
+
             //console.log(firstDelay);
-           
-            
+
+
             if (stage == 1) {
                 board();
                 // main menu
                 mainMenu();
-      
+
                 canvas.addEventListener("mousemove", mainMenuOption);
                 canvas.addEventListener("mousedown", changeStage);
                 firstDelay = true;
 
             } else if (stage == 2) {
                 if (firstDelay == true) {
-                    setTimeout(setEvents, 1000);
+                    console.log("kek");
+                    setTimeout(setEvents, 150);
                     firstDelay = false;
                 }
-                
+
                 board();
                 //player vs player
                 drawBackIcon();
@@ -659,6 +690,9 @@
 
 
         }
+
+        //init
+
 
 
         setInterval(game, 1000 / 60);
