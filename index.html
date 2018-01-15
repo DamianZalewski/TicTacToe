@@ -47,8 +47,7 @@
         var boxTextColorTop = "black";
         var boxTextColorBot = "black";
         // -----------------
-        topCanvas = canvas.offsetTop;
-        leftCanvas = canvas.offsetLeft;
+ 
 
         let stage = 1;
         //----------
@@ -73,6 +72,20 @@
             buttonWidth,
             buttonHeight,
             fontSize;
+        
+        var gameBoardFirstVerticalX,
+            gameBoardFirstVerticalY,
+            gameBoardSecondVerticalX,
+            gameBoardSecondVerticalY,
+            gameBoardFirstHorizontalX,
+            gameBoardFirstHorizontalY,
+            gameBoardSecondHorizontalX,
+            gameBoardSecondHorizontalY,
+            gameBoardWidth,
+            gameBoardHeight;
+        
+        var gameSquareSize;
+        
         //Nokia lumia 520
         if (cw >= 320 && ch >= 533) { /// !!!!!!!!!!!!!! >>>>>>>>>  !!!!!!!!!!!!!!!!!
             mainTitleSize = 45 + "px Arial";
@@ -81,6 +94,21 @@
             menuBoxX = cw/2-buttonWidth/2;
             menuBoxY = 170;
             fontSize = 30;
+            
+            //--------------
+            gameSquareSize = 80;
+                
+            gameBoardWidth = 5;
+            gameBoardHeight = 3*gameSquareSize + 3*gameBoardWidth;
+            
+            gameBoardFirstVerticalX = cw/2 - gameBoardWidth/2 - gameSquareSize/2;
+            gameBoardFirstVerticalY = 130;
+            
+            gameBoardSecondVerticalX = gameBoardFirstVerticalX+gameSquareSize;
+            gameBoardSecondVerticalY = gameBoardFirstVerticalY;
+            
+            gameBoardFirstHorizontalX = (cw/2)  - (1.5*gameSquareSize) +15;
+            gameBoardFirstHorizontalY = gameBoardFirstVerticalY+gameSquareSize + gameBoardWidth;
 
 
 
@@ -124,19 +152,19 @@
         function mainMenuOption(e) {
             // -----------------------
             console.log('-------------test------------');
-            console.log("leftCanvas" + leftCanvas);
+   
             console.log("menuBoxX :" + menuBoxX);
-            console.log("leftCanvas + menuBoxX :" + (leftCanvas + menuBoxX));
+    console.log("menuBoxX :" + menuBoxX);
 
             console.log("e.clientX :" + e.clientX);
             //-----------------------
 
             var flagA = false;
             var flagB = false;
-            if (e.clientX >= leftCanvas + menuBoxX &&
-                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
-                e.clientY >= topCanvas + buttonTop &&
-                e.clientY <= topCanvas + buttonTop + buttonHeight
+            if (e.clientX >= menuBoxX &&
+                e.clientX <= menuBoxX + buttonWidth &&
+                e.clientY >=  menuBoxY &&
+                e.clientY <=  menuBoxY + buttonHeight
             ) {
                 boxColorTop = "red";
                 boxTextColorTop = "white";
@@ -151,10 +179,10 @@
 
             }
 
-            if (e.clientX >= leftCanvas + menuBoxX &&
-                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
-                e.clientY >= topCanvas + buttonTop + buttonHeight + 50 &&
-                e.clientY <= topCanvas + buttonTop + buttonHeight * 2 + 50
+            if (e.clientX >=  menuBoxX &&
+                e.clientX <=  menuBoxX + buttonWidth &&
+                e.clientY >=menuBoxY + buttonHeight*2 &&
+                e.clientY <= menuBoxY + buttonHeight*3
             ) {
                 boxColorBot = "red";
                 boxTextColorBot = "white";
@@ -178,20 +206,21 @@
         }
 
         function changeStage(e) {
-            if (e.clientX >= leftCanvas + menuBoxX &&
-                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
-                e.clientY >= topCanvas + buttonTop &&
-                e.clientY <= topCanvas + buttonTop + buttonHeight
+                  if (e.clientX >= menuBoxX &&
+                e.clientX <= menuBoxX + buttonWidth &&
+                e.clientY >=  menuBoxY &&
+                e.clientY <=  menuBoxY + buttonHeight
             ) {
                 stage = 2;
 
             }
 
 
-            if (e.clientX >= leftCanvas + menuBoxX &&
-                e.clientX <= leftCanvas + menuBoxX + buttonWidth &&
-                e.clientY >= topCanvas + buttonTop + buttonHeight + 50 &&
-                e.clientY <= topCanvas + buttonTop + buttonHeight * 2 + 50
+            
+            if (e.clientX >=  menuBoxX &&
+                e.clientX <=  menuBoxX + buttonWidth &&
+                e.clientY >=menuBoxY + buttonHeight*2 &&
+                e.clientY <= menuBoxY + buttonHeight*3
             ) {
                 stage = 3;
 
@@ -200,12 +229,14 @@
         }
 
         function gameBoard() {
-            ctx.fillStyle = "white";
-            //pionowe
-            ctx.fillRect(cw / 2 - 60, 60, 5, ch - 140);
-            ctx.fillRect(cw / 2 + 60, 60, 5, ch - 140);
-            //poziome
-            ctx.fillRect(cw / 2 - 170, ch / 2 - 60, cw / 2 - 150, 5);
+            ctx.fillStyle = "green";
+            //vertical
+            ctx.fillRect(gameBoardFirstVerticalX, gameBoardFirstVerticalY, gameBoardWidth, gameBoardHeight);
+            ctx.fillRect(gameBoardSecondVerticalX, gameBoardSecondVerticalY, gameBoardWidth, gameBoardHeight);
+  
+            
+            //horizontal
+            ctx.fillRect(gameBoardFirstHorizontalX, gameBoardFirstHorizontalY, gameBoardHeight,gameBoardWidth);
             ctx.fillRect(cw / 2 - 170, ch / 2 + 60, cw / 2 - 150, 5);
         }
 
@@ -636,7 +667,7 @@
                 canvas.addEventListener("mousedown", changeStage);
                 firstDelay = true;
 
-            } else if (stage == 2) {
+            } else if (stage == 2) { console.log("------------STAGE 2-------------");
                 if (firstDelay == true) {
                     console.log("kek");
                     setTimeout(setEvents, 150);
@@ -656,7 +687,7 @@
 
 
             } else // stage == 3
-            {
+            {console.log("------------STAGE 3-------------");
                 canvas.removeEventListener("mousedown", changeStage);
                 board();
                 //player vs computer
