@@ -6,20 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-
             padding: 0;
             margin: 0;
             background-color: darkgray;
             overflow: hidden;
         }
-
         canvas {
             width: 100vw;
             height: 100vh;
         }
-
     </style>
 </head>
+
 
 <body>
 
@@ -28,32 +26,24 @@
     <script>
         const canvas = document.querySelector('canvas');
         const ctx = canvas.getContext('2d');
-
         console.log(screen.width);
         canvas.width = screen.width;
         canvas.height = screen.height;
-
         cw = canvas.width;
-
         ch = canvas.height;
         console.log("cw :" + cw);
         console.log("ch :" + ch);
-
-
         // main menu variables
-
         var boxColorTop = "white";
         var boxColorBot = "white";
         var boxTextColorTop = "black";
         var boxTextColorBot = "black";
         // -----------------
  
-
-        let stage = 1;
+        let stage = 2;
         //----------
         var IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         var squareTurn = [null, null, null, null, null, null, null, null, null];
-
         var turnSide = true; // true - circle , false - x
         //-------------
         var scoreX = 0;
@@ -63,8 +53,6 @@
         //-------------
         var xColor = "green";
         var oColor = "red";
-
-
         //responsive
         var mainTitleSize,
             menuBoxX,
@@ -83,10 +71,14 @@
             gameBoardSecondHorizontalY,
             gameBoardWidth,
             gameBoardHeight;
-        
         var gameSquareSize;
         
-        //Nokia lumia 520
+        //---------------
+        
+        var topGameMenuX,
+            topGameMenuY;
+        
+        // media responsible 
         if (cw >= 320 && ch >= 533) { /// !!!!!!!!!!!!!! >>>>>>>>>  !!!!!!!!!!!!!!!!!
             mainTitleSize = 45 + "px Arial";
             buttonWidth = 250;
@@ -101,64 +93,50 @@
             gameBoardWidth = 5;
             gameBoardHeight = 3*gameSquareSize + 3*gameBoardWidth;
             
-            gameBoardFirstVerticalX = cw/2 - gameBoardWidth/2 - gameSquareSize/2;
+            gameBoardFirstVerticalX = (cw/2) - (gameSquareSize/2) - gameBoardWidth;
             gameBoardFirstVerticalY = 130;
             
-            gameBoardSecondVerticalX = gameBoardFirstVerticalX+gameSquareSize;
+            gameBoardSecondVerticalX = gameBoardFirstVerticalX+gameSquareSize+gameBoardWidth;
             gameBoardSecondVerticalY = gameBoardFirstVerticalY;
             
-            gameBoardFirstHorizontalX = (cw/2)  - (1.5*gameSquareSize) +15;
-            gameBoardFirstHorizontalY = gameBoardFirstVerticalY+gameSquareSize + gameBoardWidth;
-
-
-
+            gameBoardFirstHorizontalX = (cw/2)  - (1.5*gameSquareSize) - gameBoardWidth ;
+            gameBoardFirstHorizontalY = gameBoardFirstVerticalY+gameSquareSize;
+            
+            gameBoardSecondHorizontalX = gameBoardFirstHorizontalX;
+            gameBoardSecondHorizontalY = gameBoardFirstHorizontalY + gameSquareSize+gameBoardWidth;
+            
+            //----------------
+            
         }
-
-
         // create start board fill by a black color;
         function board() {
-
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, cw, ch);
-
         }
-
         // draw main menu buttons and make their hover state
         function mainMenu() {
-
             ctx.fillStyle = "white";
             ctx.font = mainTitleSize;
-
-
             ctx.textAlign = "center";
             ctx.fillText("Tic Tac Toe", cw / 2, 100);
-
             ctx.fillStyle = boxColorTop;
             ctx.fillRect(menuBoxX, menuBoxY, buttonWidth, buttonHeight);
             ctx.fillStyle = boxColorBot;
             ctx.fillRect(menuBoxX, menuBoxY + buttonHeight*2, buttonWidth, buttonHeight);
-
             ctx.fillStyle = boxTextColorTop;
             ctx.font = fontSize + "px Arial";
             ctx.fillText("Player vs Player", cw / 2, menuBoxY + buttonHeight - fontSize*0.8);
-
             ctx.fillStyle = boxTextColorBot;
             ctx.fillText("Player vs Comp", cw / 2, menuBoxY + buttonHeight*3 - fontSize*0.8);
-
-
-
         }
-
         function mainMenuOption(e) {
             // -----------------------
             console.log('-------------test------------');
    
             console.log("menuBoxX :" + menuBoxX);
     console.log("menuBoxX :" + menuBoxX);
-
             console.log("e.clientX :" + e.clientX);
             //-----------------------
-
             var flagA = false;
             var flagB = false;
             if (e.clientX >= menuBoxX &&
@@ -168,17 +146,12 @@
             ) {
                 boxColorTop = "red";
                 boxTextColorTop = "white";
-
                 flagA = true;
-
             } else {
                 boxColorTop = "white";
                 boxTextColorTop = "black";
                 flagA = false;
-
-
             }
-
             if (e.clientX >=  menuBoxX &&
                 e.clientX <=  menuBoxX + buttonWidth &&
                 e.clientY >=menuBoxY + buttonHeight*2 &&
@@ -187,24 +160,17 @@
                 boxColorBot = "red";
                 boxTextColorBot = "white";
                 flagB = true;
-
-
-
             } else {
                 boxColorBot = "white";
                 boxTextColorBot = "black";
                 flagB = false;
-
-
             }
             if ((flagA || flagB) && stage == 1) {
                 canvas.style.cursor = "pointer";
             } else {
                 canvas.style.cursor = "context-menu";
             }
-
         }
-
         function changeStage(e) {
                   if (e.clientX >= menuBoxX &&
                 e.clientX <= menuBoxX + buttonWidth &&
@@ -212,10 +178,7 @@
                 e.clientY <=  menuBoxY + buttonHeight
             ) {
                 stage = 2;
-
             }
-
-
             
             if (e.clientX >=  menuBoxX &&
                 e.clientX <=  menuBoxX + buttonWidth &&
@@ -223,11 +186,9 @@
                 e.clientY <= menuBoxY + buttonHeight*3
             ) {
                 stage = 3;
-
             }
-
         }
-
+        
         function gameBoard() {
             ctx.fillStyle = "green";
             //vertical
@@ -237,12 +198,10 @@
             
             //horizontal
             ctx.fillRect(gameBoardFirstHorizontalX, gameBoardFirstHorizontalY, gameBoardHeight,gameBoardWidth);
-            ctx.fillRect(cw / 2 - 170, ch / 2 + 60, cw / 2 - 150, 5);
+            ctx.fillRect(gameBoardSecondHorizontalX, gameBoardSecondHorizontalY,   gameBoardHeight,gameBoardWidth);
         }
-
+        
         function chooseSquare(e) {
-
-
             // first 3 square
             if (e.clientX >= leftCanvas + cw / 2 - 165 &&
                 e.clientX <= leftCanvas + cw / 2 - 60 &&
@@ -251,9 +210,7 @@
             ) {
                 if (IconTab[0] == 0) {
                     //   console.log("pole 1");
-
                     IconTab[0] = 1;
-
                     turnSide = !turnSide;
                 }
             } else
@@ -265,7 +222,6 @@
                 if (IconTab[1] == 0) {
                     //   console.log("pole 2");
                     IconTab[1] = 1;
-
                     turnSide = !turnSide;
                 }
             } else
@@ -280,7 +236,6 @@
                     turnSide = !turnSide;
                 }
             }
-
             // second 3 square
             else if (e.clientX >= leftCanvas + cw / 2 - 165 &&
                 e.clientX <= leftCanvas + cw / 2 - 60 &&
@@ -315,7 +270,6 @@
                     turnSide = !turnSide;
                 }
             }
-
             // third 3 square
             else if (e.clientX >= leftCanvas + cw / 2 - 165 &&
                 e.clientX <= leftCanvas + cw / 2 - 60 &&
@@ -350,32 +304,23 @@
                     turnSide = !turnSide;
                 }
             }
-
             // back to main menu button
-
             if (e.clientX >= leftCanvas + 30 &&
                 e.clientX <= leftCanvas + 180 &&
                 e.clientY >= topCanvas + ch - 70 &&
                 e.clientY <= topCanvas + ch
             ) goBack();
-
             //console.log(squareTurn);
-
-
         }
-
         function drawIcon() {
             ctx.fillStyle = "white";
             ctx.font = "80px Arial";
             ctx.textAlign = "center";
-
-
             //first 3 square
             if (IconTab[0] == 1) {
                 if (squareTurn[0] == null) {
                     squareTurn[0] = turnSide;
                 }
-
                 if (squareTurn[0]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2 - 120, 150)
@@ -383,14 +328,11 @@
                     ctx.fillStyle = oColor;
                     ctx.fillText("O", cw / 2 - 120, 150)
                 }
-
             }
             if (IconTab[1] == 1) {
                 if (squareTurn[1] == null) {
                     squareTurn[1] = turnSide;
                 }
-
-
                 if (squareTurn[1]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2, 150);
@@ -403,9 +345,6 @@
                 if (squareTurn[2] == null) {
                     squareTurn[2] = turnSide;
                 }
-
-
-
                 if (squareTurn[2]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2 + 120, 150);
@@ -419,8 +358,6 @@
                 if (squareTurn[3] == null) {
                     squareTurn[3] = turnSide;
                 }
-
-
                 if (squareTurn[3]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2 - 120, 280);
@@ -433,8 +370,6 @@
                 if (squareTurn[4] == null) {
                     squareTurn[4] = turnSide;
                 }
-
-
                 if (squareTurn[4]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2, 280);
@@ -447,8 +382,6 @@
                 if (squareTurn[5] == null) {
                     squareTurn[5] = turnSide;
                 }
-
-
                 if (squareTurn[5]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2 + 120, 280);
@@ -462,8 +395,6 @@
                 if (squareTurn[6] == null) {
                     squareTurn[6] = turnSide;
                 }
-
-
                 if (squareTurn[6]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2 - 120, 400);
@@ -476,8 +407,6 @@
                 if (squareTurn[7] == null) {
                     squareTurn[7] = turnSide;
                 }
-
-
                 if (squareTurn[7]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2, 400);
@@ -490,9 +419,6 @@
                 if (squareTurn[8] == null) {
                     squareTurn[8] = turnSide;
                 }
-
-
-
                 if (squareTurn[8]) {
                     ctx.fillStyle = xColor;
                     ctx.fillText("X", cw / 2 + 120, 400);
@@ -502,21 +428,15 @@
                 }
             }
         }
-
-
         function topMenu() {
             ctx.fillStyle = "white";
             ctx.font = "36px Arial";
-
             if (!turnSide)
                 ctx.fillText("runda gracza : X", cw / 2, 40);
             else
                 ctx.fillText("runda gracza : O", cw / 2, 40);
-
         }
-
         function showScore() {
-
             ctx.font = "72px Arial";
             ctx.fillStyle = xColor;
             ctx.fillText("Gracz X", 150, 100);
@@ -526,55 +446,41 @@
             ctx.font = "128px Arial";
             ctx.fillText(scoreX, 150, 300);
             ctx.fillText(scoreY, cw - 150, 300);
-
         }
-
         function winner(con) {
             con ? scoreX++ : scoreY++;
             IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
             squareTurn = [null, null, null, null, null, null, null, null, null];
-
-
-
-
         }
-
         function checkWin() {
             var con = true;
-
             if (squareTurn[0] == con && squareTurn[1] == con && squareTurn[2] == con) winner(con);
             else
             if (squareTurn[3] == con && squareTurn[4] == con && squareTurn[5] == con) winner(con);
             else
             if (squareTurn[6] == con && squareTurn[7] == con && squareTurn[8] == con) winner(con);
-
             else
             if (squareTurn[0] == con && squareTurn[3] == con && squareTurn[6] == con) winner(con);
             else
             if (squareTurn[1] == con && squareTurn[4] == con && squareTurn[7] == con) winner(con);
             else
             if (squareTurn[2] == con && squareTurn[5] == con && squareTurn[8] == con) winner(con);
-
             else
             if (squareTurn[0] == con && squareTurn[4] == con && squareTurn[8] == con) winner(con);
             else
             if (squareTurn[2] == con && squareTurn[4] == con && squareTurn[6] == con) winner(con);
-
             con = false;
-
             if (squareTurn[0] == con && squareTurn[1] == con && squareTurn[2] == con) winner(con);
             else
             if (squareTurn[3] == con && squareTurn[4] == con && squareTurn[5] == con) winner(con);
             else
             if (squareTurn[6] == con && squareTurn[7] == con && squareTurn[8] == con) winner(con);
-
             else
             if (squareTurn[0] == con && squareTurn[3] == con && squareTurn[6] == con) winner(con);
             else
             if (squareTurn[1] == con && squareTurn[4] == con && squareTurn[7] == con) winner(con);
             else
             if (squareTurn[2] == con && squareTurn[5] == con && squareTurn[8] == con) winner(con);
-
             else
             if (squareTurn[0] == con && squareTurn[4] == con && squareTurn[8] == con) winner(con);
             else
@@ -584,26 +490,19 @@
                 for (var i = 0; i <= 8; i++) {
                     squareTurn[i] == null ? check = false : null;
                     // console.log(check);
-
                 }
                 if (check) {
                     IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                     squareTurn = [null, null, null, null, null, null, null, null, null];
                 }
             }
-
-
         }
-
         function drawBackIcon() {
             ctx.fillStyle = 'white';
-
             ctx.font = "36px Arial";
-
             ctx.textAlign = "left";
             ctx.fillText("< MENU", 30, ch - 30);
         }
-
         function goBack() {
             stage = 1;
             IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -614,78 +513,52 @@
             firstDelay = true;
             canvas.removeEventListener("mousedown", chooseSquare);
             clearTimeout(setEvents);
-
         }
-
         function computerAI() {
-
             var checkSlot = false;
             for (var i = 0; i <= 8; i++) {
                 if (IconTab[i] == 0) {
                     checkSlot = true;
                 }
             }
-
             while (checkSlot) {
                 var random = Math.floor(Math.random() * 8) + 0;
-
                 // console.log(random);
-
                 if (IconTab[random] == 0) {
                     IconTab[random] = 1;
                     turnSide = !turnSide;
-
                     break;
-
                 }
-
-
             }
-
         }
-
         function setEvents() {
             canvas.removeEventListener("mousedown", changeStage);
             canvas.addEventListener("click", chooseSquare);
-
         }
-
-
-
         function game() {
             // console.log(stage);
-
             //console.log(firstDelay);
-
-
             if (stage == 1) {
                 board();
                 // main menu
                 mainMenu();
-
                 canvas.addEventListener("mousemove", mainMenuOption);
                 canvas.addEventListener("mousedown", changeStage);
                 firstDelay = true;
-
             } else if (stage == 2) { console.log("------------STAGE 2-------------");
                 if (firstDelay == true) {
                     console.log("kek");
                     setTimeout(setEvents, 150);
                     firstDelay = false;
                 }
-
                 board();
                 //player vs player
-                drawBackIcon();
+                //drawBackIcon();
                 gameBoard();
-                drawIcon();
+                //drawIcon();
                 topMenu();
-                showScore();
-                checkWin();
-
-
-
-
+                //showScore();
+               // checkWin();
             } else // stage == 3
             {console.log("------------STAGE 3-------------");
                 canvas.removeEventListener("mousedown", changeStage);
@@ -698,37 +571,20 @@
                 showScore();
                 checkWin();
                 if (turnSide == true) {
-
                     canvas.addEventListener("click", chooseSquare);
-
-
-
                 }
                 if (turnSide == false) {
                     canvas.removeEventListener("click", chooseSquare);
                     turnSide = null;
-
                     setTimeout(computerAI, 800);
-
                 }
-
                 //  console.log(turnSide)
-
-
             }
-
-
-
-
         }
-
         //init
-
-
-
         setInterval(game, 1000 / 60);
-
     </script>
 </body>
 
+</html>
 </html>
