@@ -11,10 +11,12 @@
             background-color: darkgray;
             overflow: hidden;
         }
+
         canvas {
             width: 100vw;
             height: 100vh;
         }
+
     </style>
 </head>
 
@@ -39,7 +41,7 @@
         var boxTextColorTop = "black";
         var boxTextColorBot = "black";
         // -----------------
- 
+
         let stage = 2;
         //----------
         var IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -60,7 +62,7 @@
             buttonWidth,
             buttonHeight,
             fontSize;
-        
+
         var gameBoardFirstVerticalX,
             gameBoardFirstVerticalY,
             gameBoardSecondVerticalX,
@@ -72,42 +74,111 @@
             gameBoardWidth,
             gameBoardHeight;
         var gameSquareSize;
-        
+
         //---------------
-        
+
         var topGameMenuX,
-            topGameMenuY;
-        
+            topGameMenuY,
+            topMenuFont;
+        //---------------
+        var scoreFontSize,
+            xPlayerTitleX,
+            xPlayerTitleY,
+            oPlayerTitleX,
+            oPlayerTitleY,
+            xScoreX,
+            xScoreY,
+            oScoreX,
+            oScoreY;
+        //---------------
+        var backIconFont,
+            backIconX,
+            backIconY;
+
+
         // media responsible 
-        if (cw >= 320 && ch >= 533) { /// !!!!!!!!!!!!!! >>>>>>>>>  !!!!!!!!!!!!!!!!!
+        if (cw <= 320 && ch <= 533) {
             mainTitleSize = 45 + "px Arial";
             buttonWidth = 250;
-            buttonHeight = 70;  
-            menuBoxX = cw/2-buttonWidth/2;
+            buttonHeight = 70;
+            menuBoxX = cw / 2 - buttonWidth / 2;
             menuBoxY = 170;
             fontSize = 30;
-            
+
             //--------------
             gameSquareSize = 80;
-                
+
             gameBoardWidth = 5;
-            gameBoardHeight = 3*gameSquareSize + 3*gameBoardWidth;
-            
-            gameBoardFirstVerticalX = (cw/2) - (gameSquareSize/2) - gameBoardWidth;
-            gameBoardFirstVerticalY = 130;
-            
-            gameBoardSecondVerticalX = gameBoardFirstVerticalX+gameSquareSize+gameBoardWidth;
+            gameBoardHeight = 3 * gameSquareSize + 3 * gameBoardWidth;
+
+            gameBoardFirstVerticalX = (cw / 2) - (gameSquareSize / 2) - gameBoardWidth;
+            gameBoardFirstVerticalY = 110;
+
+            gameBoardSecondVerticalX = gameBoardFirstVerticalX + gameSquareSize + gameBoardWidth;
             gameBoardSecondVerticalY = gameBoardFirstVerticalY;
-            
-            gameBoardFirstHorizontalX = (cw/2)  - (1.5*gameSquareSize) - gameBoardWidth ;
-            gameBoardFirstHorizontalY = gameBoardFirstVerticalY+gameSquareSize;
-            
+
+            gameBoardFirstHorizontalX = (cw / 2) - (1.5 * gameSquareSize) - gameBoardWidth;
+            gameBoardFirstHorizontalY = gameBoardFirstVerticalY + gameSquareSize;
+
             gameBoardSecondHorizontalX = gameBoardFirstHorizontalX;
-            gameBoardSecondHorizontalY = gameBoardFirstHorizontalY + gameSquareSize+gameBoardWidth;
-            
+            gameBoardSecondHorizontalY = gameBoardFirstHorizontalY + gameSquareSize + gameBoardWidth;
+
             //----------------
-            
+            topMenuFont = 30;
+            topGameMenuY = 70;
+            topGameMenuX = cw / 2;
+            //----------------
+            scoreTitlesFontSize = 36;
+            xPlayerTitleX = 10;
+            xPlayerTitleY = ch - 110;
+            oPlayerTitleX = cw - 10;
+            oPlayerTitleY = xPlayerTitleY;
+            ScoresFont = 56;
+            xScoreX = 75;
+            xScoreY = xPlayerTitleY + 55;
+            oScoreX = cw - xScoreX;
+            oScoreY = xScoreY;
+            //----------------
+            backIconFont = 24;
+            backIconX = 10;
+            backIconY = 24;
+
         }
+
+        function drawBackIcon() {
+            ctx.fillStyle = 'white';
+            ctx.font = backIconFont + "px Arial";
+            ctx.textAlign = "left";
+            ctx.fillText("< menu", backIconX, backIconY);
+        }
+
+        function showScore() {
+            ctx.font = scoreTitlesFontSize + "px Arial";
+            ctx.fillStyle = xColor;
+            ctx.textAlign = "left";
+            ctx.fillText("Gracz X", xPlayerTitleX, xPlayerTitleY);
+            ctx.textAlign = "right";
+            ctx.fillStyle = oColor;
+            ctx.fillText("Gracz O", oPlayerTitleX, oPlayerTitleY);
+            ctx.textAlign = "center";
+            ctx.fillStyle = 'white';
+            ctx.font = ScoresFont + "px Arial";
+            ctx.fillText(scoreX, xScoreX, xScoreY);
+            ctx.fillText(scoreY, oScoreX, oScoreY);
+        }
+
+
+        function topMenu() {
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.font = topMenuFont + "px Arial";
+            if (!turnSide)
+                ctx.fillText("runda gracza : X", topGameMenuX, topGameMenuY);
+            else
+                ctx.fillText("runda gracza : O", topGameMenuX, topGameMenuY);
+        }
+
+
         // create start board fill by a black color;
         function board() {
             ctx.fillStyle = 'black';
@@ -122,27 +193,28 @@
             ctx.fillStyle = boxColorTop;
             ctx.fillRect(menuBoxX, menuBoxY, buttonWidth, buttonHeight);
             ctx.fillStyle = boxColorBot;
-            ctx.fillRect(menuBoxX, menuBoxY + buttonHeight*2, buttonWidth, buttonHeight);
+            ctx.fillRect(menuBoxX, menuBoxY + buttonHeight * 2, buttonWidth, buttonHeight);
             ctx.fillStyle = boxTextColorTop;
             ctx.font = fontSize + "px Arial";
-            ctx.fillText("Player vs Player", cw / 2, menuBoxY + buttonHeight - fontSize*0.8);
+            ctx.fillText("Player vs Player", cw / 2, menuBoxY + buttonHeight - fontSize * 0.8);
             ctx.fillStyle = boxTextColorBot;
-            ctx.fillText("Player vs Comp", cw / 2, menuBoxY + buttonHeight*3 - fontSize*0.8);
+            ctx.fillText("Player vs Comp", cw / 2, menuBoxY + buttonHeight * 3 - fontSize * 0.8);
         }
+
         function mainMenuOption(e) {
             // -----------------------
             console.log('-------------test------------');
-   
+
             console.log("menuBoxX :" + menuBoxX);
-    console.log("menuBoxX :" + menuBoxX);
+            console.log("menuBoxX :" + menuBoxX);
             console.log("e.clientX :" + e.clientX);
             //-----------------------
             var flagA = false;
             var flagB = false;
             if (e.clientX >= menuBoxX &&
                 e.clientX <= menuBoxX + buttonWidth &&
-                e.clientY >=  menuBoxY &&
-                e.clientY <=  menuBoxY + buttonHeight
+                e.clientY >= menuBoxY &&
+                e.clientY <= menuBoxY + buttonHeight
             ) {
                 boxColorTop = "red";
                 boxTextColorTop = "white";
@@ -152,10 +224,10 @@
                 boxTextColorTop = "black";
                 flagA = false;
             }
-            if (e.clientX >=  menuBoxX &&
-                e.clientX <=  menuBoxX + buttonWidth &&
-                e.clientY >=menuBoxY + buttonHeight*2 &&
-                e.clientY <= menuBoxY + buttonHeight*3
+            if (e.clientX >= menuBoxX &&
+                e.clientX <= menuBoxX + buttonWidth &&
+                e.clientY >= menuBoxY + buttonHeight * 2 &&
+                e.clientY <= menuBoxY + buttonHeight * 3
             ) {
                 boxColorBot = "red";
                 boxTextColorBot = "white";
@@ -171,36 +243,37 @@
                 canvas.style.cursor = "context-menu";
             }
         }
+
         function changeStage(e) {
-                  if (e.clientX >= menuBoxX &&
+            if (e.clientX >= menuBoxX &&
                 e.clientX <= menuBoxX + buttonWidth &&
-                e.clientY >=  menuBoxY &&
-                e.clientY <=  menuBoxY + buttonHeight
+                e.clientY >= menuBoxY &&
+                e.clientY <= menuBoxY + buttonHeight
             ) {
                 stage = 2;
             }
-            
-            if (e.clientX >=  menuBoxX &&
-                e.clientX <=  menuBoxX + buttonWidth &&
-                e.clientY >=menuBoxY + buttonHeight*2 &&
-                e.clientY <= menuBoxY + buttonHeight*3
+
+            if (e.clientX >= menuBoxX &&
+                e.clientX <= menuBoxX + buttonWidth &&
+                e.clientY >= menuBoxY + buttonHeight * 2 &&
+                e.clientY <= menuBoxY + buttonHeight * 3
             ) {
                 stage = 3;
             }
         }
-        
+
         function gameBoard() {
-            ctx.fillStyle = "green";
+            ctx.fillStyle = "white";
             //vertical
             ctx.fillRect(gameBoardFirstVerticalX, gameBoardFirstVerticalY, gameBoardWidth, gameBoardHeight);
             ctx.fillRect(gameBoardSecondVerticalX, gameBoardSecondVerticalY, gameBoardWidth, gameBoardHeight);
-  
-            
+
+
             //horizontal
-            ctx.fillRect(gameBoardFirstHorizontalX, gameBoardFirstHorizontalY, gameBoardHeight,gameBoardWidth);
-            ctx.fillRect(gameBoardSecondHorizontalX, gameBoardSecondHorizontalY,   gameBoardHeight,gameBoardWidth);
+            ctx.fillRect(gameBoardFirstHorizontalX, gameBoardFirstHorizontalY, gameBoardHeight, gameBoardWidth);
+            ctx.fillRect(gameBoardSecondHorizontalX, gameBoardSecondHorizontalY, gameBoardHeight, gameBoardWidth);
         }
-        
+
         function chooseSquare(e) {
             // first 3 square
             if (e.clientX >= leftCanvas + cw / 2 - 165 &&
@@ -312,6 +385,7 @@
             ) goBack();
             //console.log(squareTurn);
         }
+
         function drawIcon() {
             ctx.fillStyle = "white";
             ctx.font = "80px Arial";
@@ -428,30 +502,17 @@
                 }
             }
         }
-        function topMenu() {
-            ctx.fillStyle = "white";
-            ctx.font = "36px Arial";
-            if (!turnSide)
-                ctx.fillText("runda gracza : X", cw / 2, 40);
-            else
-                ctx.fillText("runda gracza : O", cw / 2, 40);
-        }
-        function showScore() {
-            ctx.font = "72px Arial";
-            ctx.fillStyle = xColor;
-            ctx.fillText("Gracz X", 150, 100);
-            ctx.fillStyle = oColor;
-            ctx.fillText("Gracz O", cw - 150, 100);
-            ctx.fillStyle = 'white';
-            ctx.font = "128px Arial";
-            ctx.fillText(scoreX, 150, 300);
-            ctx.fillText(scoreY, cw - 150, 300);
-        }
+
+
+
+
+
         function winner(con) {
             con ? scoreX++ : scoreY++;
             IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
             squareTurn = [null, null, null, null, null, null, null, null, null];
         }
+
         function checkWin() {
             var con = true;
             if (squareTurn[0] == con && squareTurn[1] == con && squareTurn[2] == con) winner(con);
@@ -497,12 +558,9 @@
                 }
             }
         }
-        function drawBackIcon() {
-            ctx.fillStyle = 'white';
-            ctx.font = "36px Arial";
-            ctx.textAlign = "left";
-            ctx.fillText("< MENU", 30, ch - 30);
-        }
+
+
+
         function goBack() {
             stage = 1;
             IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -514,6 +572,7 @@
             canvas.removeEventListener("mousedown", chooseSquare);
             clearTimeout(setEvents);
         }
+
         function computerAI() {
             var checkSlot = false;
             for (var i = 0; i <= 8; i++) {
@@ -531,10 +590,12 @@
                 }
             }
         }
+
         function setEvents() {
             canvas.removeEventListener("mousedown", changeStage);
             canvas.addEventListener("click", chooseSquare);
         }
+
         function game() {
             // console.log(stage);
             //console.log(firstDelay);
@@ -545,7 +606,8 @@
                 canvas.addEventListener("mousemove", mainMenuOption);
                 canvas.addEventListener("mousedown", changeStage);
                 firstDelay = true;
-            } else if (stage == 2) { console.log("------------STAGE 2-------------");
+            } else if (stage == 2) {
+                //console.log("------------STAGE 2-------------");
                 if (firstDelay == true) {
                     console.log("kek");
                     setTimeout(setEvents, 150);
@@ -553,14 +615,15 @@
                 }
                 board();
                 //player vs player
-                //drawBackIcon();
+                drawBackIcon();
                 gameBoard();
                 //drawIcon();
                 topMenu();
-                //showScore();
-               // checkWin();
+                showScore();
+                // checkWin();
             } else // stage == 3
-            {console.log("------------STAGE 3-------------");
+            {
+                console.log("------------STAGE 3-------------");
                 canvas.removeEventListener("mousedown", changeStage);
                 board();
                 //player vs computer
@@ -583,8 +646,8 @@
         }
         //init
         setInterval(game, 1000 / 60);
+
     </script>
 </body>
 
-</html>
 </html>
