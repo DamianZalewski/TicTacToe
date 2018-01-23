@@ -5,6 +5,12 @@
     <title>Tic Tac Toe</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        *
+        {
+            margin:0;
+            padding:0;
+        }
+        
         body {
             padding: 0;
             margin: 0;
@@ -42,7 +48,7 @@
         var boxTextColorBot = "black";
         // -----------------
 
-        let stage = 2;
+        let stage = 1;
         //----------
         var IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         var squareTurn = [null, null, null, null, null, null, null, null, null];
@@ -93,63 +99,235 @@
         //---------------
         var backIconFont,
             backIconX,
-            backIconY;
-
+            backIconY,
+            backIconWidth;
+        //---------------
+        var IconSize,
+            Icon1X,
+            Icon1Y,
+            Icon2X,
+            Icon2Y,
+            Icon3X,
+            Icon3Y,
+            Icon4X,
+            Icon4Y,
+            Icon5X,
+            Icon5Y,
+            Icon6X,
+            Icon6Y,
+            Icon7X,
+            Icon7Y,
+            Icon8X,
+            Icon8Y,
+            Icon9X,
+            Icon9Y;
 
         // media responsible 
-        if (cw <= 320 && ch <= 533) {
-            mainTitleSize = 45 + "px Arial";
-            buttonWidth = 250;
-            buttonHeight = 70;
-            menuBoxX = cw / 2 - buttonWidth / 2;
-            menuBoxY = 170;
-            fontSize = 30;
 
-            //--------------
-            gameSquareSize = 80;
+        mainTitleSize = 45 + "px Arial";
+        buttonWidth = 250;
+        buttonHeight = 70;
+        menuBoxX = cw / 2 - buttonWidth / 2;
+        menuBoxY = 170;
+        fontSize = 30;
 
-            gameBoardWidth = 5;
-            gameBoardHeight = 3 * gameSquareSize + 3 * gameBoardWidth;
+        //--------------
+        gameSquareSize = 80;
 
-            gameBoardFirstVerticalX = (cw / 2) - (gameSquareSize / 2) - gameBoardWidth;
-            gameBoardFirstVerticalY = 110;
+        gameBoardWidth = 5;
+        gameBoardHeight = 3 * gameSquareSize + 3 * gameBoardWidth;
 
-            gameBoardSecondVerticalX = gameBoardFirstVerticalX + gameSquareSize + gameBoardWidth;
-            gameBoardSecondVerticalY = gameBoardFirstVerticalY;
+        gameBoardFirstVerticalX = (cw / 2) - (gameSquareSize / 2) - gameBoardWidth;
+        gameBoardFirstVerticalY = 110;
 
-            gameBoardFirstHorizontalX = (cw / 2) - (1.5 * gameSquareSize) - gameBoardWidth;
-            gameBoardFirstHorizontalY = gameBoardFirstVerticalY + gameSquareSize;
+        gameBoardSecondVerticalX = gameBoardFirstVerticalX + gameSquareSize + gameBoardWidth;
+        gameBoardSecondVerticalY = gameBoardFirstVerticalY;
 
-            gameBoardSecondHorizontalX = gameBoardFirstHorizontalX;
-            gameBoardSecondHorizontalY = gameBoardFirstHorizontalY + gameSquareSize + gameBoardWidth;
+        gameBoardFirstHorizontalX = (cw / 2) - (1.5 * gameSquareSize) - gameBoardWidth;
+        gameBoardFirstHorizontalY = gameBoardFirstVerticalY + gameSquareSize;
 
-            //----------------
-            topMenuFont = 30;
-            topGameMenuY = 70;
-            topGameMenuX = cw / 2;
-            //----------------
-            scoreTitlesFontSize = 36;
-            xPlayerTitleX = 10;
-            xPlayerTitleY = ch - 110;
-            oPlayerTitleX = cw - 10;
-            oPlayerTitleY = xPlayerTitleY;
-            ScoresFont = 56;
-            xScoreX = 75;
-            xScoreY = xPlayerTitleY + 55;
-            oScoreX = cw - xScoreX;
-            oScoreY = xScoreY;
-            //----------------
-            backIconFont = 24;
-            backIconX = 10;
-            backIconY = 24;
+        gameBoardSecondHorizontalX = gameBoardFirstHorizontalX;
+        gameBoardSecondHorizontalY = gameBoardFirstHorizontalY + gameSquareSize + gameBoardWidth;
 
+        //----------------
+        topMenuFont = 30;
+        topGameMenuY = 70;
+        topGameMenuX = cw / 2;
+        //----------------
+        scoreTitlesFontSize = 36;
+        xPlayerTitleX = 10;
+        xPlayerTitleY = ch - 110;
+        oPlayerTitleX = cw - 10;
+        oPlayerTitleY = xPlayerTitleY;
+        ScoresFont = 56;
+        xScoreX = 75;
+        xScoreY = xPlayerTitleY + 55;
+        oScoreX = cw - xScoreX;
+        oScoreY = xScoreY;
+        //----------------
+        backIconFont = 24;
+        backIconX = 10;
+        backIconY = 24;
+
+        //----------------
+        IconSize = 68;
+        Icon1X = gameBoardFirstHorizontalX + gameSquareSize * 0.5;
+        Icon1Y = gameBoardFirstHorizontalY - 0.2 * IconSize;
+
+        Icon2X = gameBoardFirstHorizontalX + gameSquareSize * 1.5 + gameBoardWidth;
+        Icon2Y = Icon1Y;
+
+        Icon3X = gameBoardFirstHorizontalX + gameSquareSize * 2.5 + 2 * gameBoardWidth;
+        Icon3Y = Icon1Y;
+        
+        //---
+        
+        Icon4X = gameBoardFirstHorizontalX + gameSquareSize * 0.5;
+        Icon4Y = gameBoardSecondHorizontalY - 0.2 * IconSize;
+
+        Icon5X = gameBoardFirstHorizontalX + gameSquareSize * 1.5 + gameBoardWidth;
+        Icon5Y = Icon4Y;
+
+        Icon6X = gameBoardFirstHorizontalX + gameSquareSize * 2.5 + 2 * gameBoardWidth;
+        Icon6Y = Icon4Y;
+        
+        //---
+        
+        Icon7X = gameBoardFirstHorizontalX + gameSquareSize * 0.5;
+        Icon7Y = gameBoardSecondHorizontalY - 0.2 * IconSize + gameSquareSize+gameBoardWidth;
+
+        Icon8X = gameBoardFirstHorizontalX + gameSquareSize * 1.5 + gameBoardWidth;
+        Icon8Y = Icon7Y;
+
+        Icon9X = gameBoardFirstHorizontalX + gameSquareSize * 2.5 + 2 * gameBoardWidth;
+        Icon9Y = Icon7Y;
+
+
+
+        function drawIcon() {
+            ctx.fillStyle = "white";
+            ctx.font = IconSize + "px Arial";
+            ctx.textAlign = "center";
+            //first 3 square
+            if (IconTab[0] == 1) {
+                if (squareTurn[0] == null) {
+                    squareTurn[0] = turnSide;
+                }
+                if (squareTurn[0]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon1X, Icon1Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon1X, Icon1Y);
+                }
+            }
+            if (IconTab[1] == 1) {
+                if (squareTurn[1] == null) {
+                    squareTurn[1] = turnSide;
+                }
+                if (squareTurn[1]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon2X, Icon2Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon2X, Icon2Y);
+                }
+            }
+            if (IconTab[2] == 1) {
+                if (squareTurn[2] == null) {
+                    squareTurn[2] = turnSide;
+                }
+                if (squareTurn[2]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon3X, Icon3Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon3X, Icon3Y);
+                }
+            }
+            //second 3 square
+            if (IconTab[3] == 1) {
+                if (squareTurn[3] == null) {
+                    squareTurn[3] = turnSide;
+                }
+                if (squareTurn[3]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon4X, Icon4Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon4X, Icon4Y);
+                }
+            }
+            if (IconTab[4] == 1) {
+                if (squareTurn[4] == null) {
+                    squareTurn[4] = turnSide;
+                }
+                if (squareTurn[4]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon5X, Icon5Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon5X, Icon5Y);
+                }
+            }
+            if (IconTab[5] == 1) {
+                if (squareTurn[5] == null) {
+                    squareTurn[5] = turnSide;
+                }
+                if (squareTurn[5]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon6X, Icon6Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon6X, Icon6Y);
+                }
+            }
+            //third 3 square
+            if (IconTab[6] == 1) {
+                if (squareTurn[6] == null) {
+                    squareTurn[6] = turnSide;
+                }
+                if (squareTurn[6]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon7X, Icon7Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon7X, Icon7Y);
+                }
+            }
+            if (IconTab[7] == 1) {
+                if (squareTurn[7] == null) {
+                    squareTurn[7] = turnSide;
+                }
+                if (squareTurn[7]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon8X, Icon8Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon8X, Icon8Y);
+                }
+            }
+            if (IconTab[8] == 1) {
+                if (squareTurn[8] == null) {
+                    squareTurn[8] = turnSide;
+                }
+                if (squareTurn[8]) {
+                    ctx.fillStyle = xColor;
+                    ctx.fillText("X", Icon9X, Icon9Y);
+                } else {
+                    ctx.fillStyle = oColor;
+                    ctx.fillText("O", Icon9X, Icon9Y);
+                }
+            }
         }
 
         function drawBackIcon() {
             ctx.fillStyle = 'white';
             ctx.font = backIconFont + "px Arial";
             ctx.textAlign = "left";
-            ctx.fillText("< menu", backIconX, backIconY);
+            let txt = "< menu";
+            backIconWidth = ctx.measureText(txt).width;
+            ctx.fillText(txt, backIconX, backIconY);
         }
 
         function showScore() {
@@ -276,232 +454,118 @@
 
         function chooseSquare(e) {
             // first 3 square
-            if (e.clientX >= leftCanvas + cw / 2 - 165 &&
-                e.clientX <= leftCanvas + cw / 2 - 60 &&
-                e.clientY >= topCanvas + 60 &&
-                e.clientY <= topCanvas + ch / 2 - 60
+            if (e.clientX >= gameBoardFirstHorizontalX &&
+                e.clientX <= gameBoardFirstHorizontalX + gameSquareSize &&
+                e.clientY >= gameBoardFirstVerticalY &&
+                e.clientY <= gameBoardFirstVerticalY + gameSquareSize
             ) {
                 if (IconTab[0] == 0) {
-                    //   console.log("pole 1");
+                    console.log("pole 1");
                     IconTab[0] = 1;
                     turnSide = !turnSide;
                 }
             } else
-            if (e.clientX >= leftCanvas + cw / 2 - 60 &&
-                e.clientX <= leftCanvas + cw / 2 + 60 &&
-                e.clientY >= topCanvas + 60 &&
-                e.clientY <= topCanvas + ch / 2 - 60
+            if (e.clientX >= gameBoardFirstHorizontalX + gameSquareSize + gameBoardWidth &&
+                e.clientX <= gameBoardFirstHorizontalX + 2 * gameSquareSize + gameBoardWidth &&
+                e.clientY >= gameBoardFirstVerticalY &&
+                e.clientY <= gameBoardFirstVerticalY + gameSquareSize
             ) {
                 if (IconTab[1] == 0) {
-                    //   console.log("pole 2");
+                    console.log("pole 2");
                     IconTab[1] = 1;
                     turnSide = !turnSide;
                 }
             } else
-            if (e.clientX >= leftCanvas + cw / 2 + 65 &&
-                e.clientX <= leftCanvas + cw / 2 + 185 &&
-                e.clientY >= topCanvas + 60 &&
-                e.clientY <= topCanvas + ch / 2 - 60
+            if (e.clientX >= gameBoardFirstHorizontalX + 2 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientX <= gameBoardFirstHorizontalX + 3 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientY >= gameBoardFirstVerticalY &&
+                e.clientY <= gameBoardFirstVerticalY + gameSquareSize
             ) {
                 if (IconTab[2] == 0) {
-                    //   console.log("pole 3");
+                    console.log("pole 3");
                     IconTab[2] = 1;
                     turnSide = !turnSide;
                 }
             }
             // second 3 square
-            else if (e.clientX >= leftCanvas + cw / 2 - 165 &&
-                e.clientX <= leftCanvas + cw / 2 - 60 &&
-                e.clientY >= topCanvas + ch / 2 - 60 &&
-                e.clientY <= topCanvas + ch / 2 + 60
+            else if (e.clientX >= gameBoardFirstHorizontalX &&
+                e.clientX <= gameBoardFirstHorizontalX + gameSquareSize &&
+                e.clientY >= gameBoardFirstVerticalY + gameSquareSize + gameBoardWidth &&
+                e.clientY <= gameBoardFirstVerticalY + 2 * gameSquareSize + gameBoardWidth
             ) {
                 if (IconTab[3] == 0) {
-                    //  console.log("pole 4");
+                    console.log("pole 4");
                     IconTab[3] = 1;
                     turnSide = !turnSide;
                 }
             } else
-            if (e.clientX >= leftCanvas + cw / 2 - 60 &&
-                e.clientX <= leftCanvas + cw / 2 + 60 &&
-                e.clientY >= topCanvas + ch / 2 - 60 &&
-                e.clientY <= topCanvas + ch / 2 + 60
+            if (e.clientX >= gameBoardFirstHorizontalX + gameSquareSize + gameBoardWidth &&
+                e.clientX <= gameBoardFirstHorizontalX + 2 * gameSquareSize + gameBoardWidth &&
+                e.clientY >= gameBoardFirstVerticalY + gameSquareSize + gameBoardWidth &&
+                e.clientY <= gameBoardFirstVerticalY + 2 * gameSquareSize + gameBoardWidth
             ) {
                 if (IconTab[4] == 0) {
-                    //   console.log("pole 5");
+                    console.log("pole 5");
                     IconTab[4] = 1;
                     turnSide = !turnSide;
                 }
             } else
-            if (e.clientX >= leftCanvas + cw / 2 + 65 &&
-                e.clientX <= leftCanvas + cw / 2 + 185 &&
-                e.clientY >= topCanvas + ch / 2 - 60 &&
-                e.clientY <= topCanvas + ch / 2 + 60
+            if (e.clientX >= gameBoardFirstHorizontalX + 2 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientX <= gameBoardFirstHorizontalX + 3 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientY >= gameBoardFirstVerticalY + gameSquareSize + gameBoardWidth &&
+                e.clientY <= gameBoardFirstVerticalY + 2 * gameSquareSize + gameBoardWidth
             ) {
                 if (IconTab[5] == 0) {
-                    //  console.log("pole 6");
+                    console.log("pole 6");
                     IconTab[5] = 1;
                     turnSide = !turnSide;
                 }
             }
             // third 3 square
-            else if (e.clientX >= leftCanvas + cw / 2 - 165 &&
-                e.clientX <= leftCanvas + cw / 2 - 60 &&
-                e.clientY >= topCanvas + ch / 2 + 60 &&
-                e.clientY <= topCanvas + ch / 2 + 200
+            else if (e.clientX >= gameBoardFirstHorizontalX &&
+                e.clientX <= gameBoardFirstHorizontalX + gameSquareSize &&
+                e.clientY >= gameBoardFirstVerticalY + 2 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientY <= gameBoardFirstVerticalY + 3 * gameSquareSize + 2 * gameBoardWidth
             ) {
                 if (IconTab[6] == 0) {
-                    //   console.log("pole 7");
+                    console.log("pole 7");
                     IconTab[6] = 1;
                     turnSide = !turnSide;
                 }
             } else
-            if (e.clientX >= leftCanvas + cw / 2 - 60 &&
-                e.clientX <= leftCanvas + cw / 2 + 60 &&
-                e.clientY >= topCanvas + ch / 2 + 60 &&
-                e.clientY <= topCanvas + ch / 2 + 200
+            if (e.clientX >= gameBoardFirstHorizontalX + gameSquareSize + gameBoardWidth &&
+                e.clientX <= gameBoardFirstHorizontalX + 2 * gameSquareSize + gameBoardWidth &&
+                e.clientY >= gameBoardFirstVerticalY + 2 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientY <= gameBoardFirstVerticalY + 3 * gameSquareSize + 2 * gameBoardWidth
             ) {
                 if (IconTab[7] == 0) {
-                    // console.log("pole 8");
+                    console.log("pole 8");
                     IconTab[7] = 1;
                     turnSide = !turnSide;
                 }
             } else
-            if (e.clientX >= leftCanvas + cw / 2 + 65 &&
-                e.clientX <= leftCanvas + cw / 2 + 185 &&
-                e.clientY >= topCanvas + ch / 2 + 60 &&
-                e.clientY <= topCanvas + ch / 2 + 200
+            if (e.clientX >= gameBoardFirstHorizontalX + 2 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientX <= gameBoardFirstHorizontalX + 3 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientY >= gameBoardFirstVerticalY + 2 * gameSquareSize + 2 * gameBoardWidth &&
+                e.clientY <= gameBoardFirstVerticalY + 3 * gameSquareSize + 2 * gameBoardWidth
             ) {
                 if (IconTab[8] == 0) {
-                    // console.log("pole 9");
+                    console.log("pole 9");
                     IconTab[8] = 1;
                     turnSide = !turnSide;
                 }
             }
             // back to main menu button
-            if (e.clientX >= leftCanvas + 30 &&
-                e.clientX <= leftCanvas + 180 &&
-                e.clientY >= topCanvas + ch - 70 &&
-                e.clientY <= topCanvas + ch
+            if (e.clientX >= backIconX &&
+                e.clientX <= backIconX + backIconWidth &&
+                e.clientY >= backIconY - backIconFont &&
+                e.clientY <= backIconY + 10
+
             ) goBack();
             //console.log(squareTurn);
         }
 
-        function drawIcon() {
-            ctx.fillStyle = "white";
-            ctx.font = "80px Arial";
-            ctx.textAlign = "center";
-            //first 3 square
-            if (IconTab[0] == 1) {
-                if (squareTurn[0] == null) {
-                    squareTurn[0] = turnSide;
-                }
-                if (squareTurn[0]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2 - 120, 150)
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2 - 120, 150)
-                }
-            }
-            if (IconTab[1] == 1) {
-                if (squareTurn[1] == null) {
-                    squareTurn[1] = turnSide;
-                }
-                if (squareTurn[1]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2, 150);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2, 150);
-                }
-            }
-            if (IconTab[2] == 1) {
-                if (squareTurn[2] == null) {
-                    squareTurn[2] = turnSide;
-                }
-                if (squareTurn[2]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2 + 120, 150);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2 + 120, 150);
-                }
-            }
-            //second 3 square
-            if (IconTab[3] == 1) {
-                if (squareTurn[3] == null) {
-                    squareTurn[3] = turnSide;
-                }
-                if (squareTurn[3]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2 - 120, 280);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2 - 120, 280);
-                }
-            }
-            if (IconTab[4] == 1) {
-                if (squareTurn[4] == null) {
-                    squareTurn[4] = turnSide;
-                }
-                if (squareTurn[4]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2, 280);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2, 280);
-                }
-            }
-            if (IconTab[5] == 1) {
-                if (squareTurn[5] == null) {
-                    squareTurn[5] = turnSide;
-                }
-                if (squareTurn[5]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2 + 120, 280);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2 + 120, 280);
-                }
-            }
-            //third 3 square
-            if (IconTab[6] == 1) {
-                if (squareTurn[6] == null) {
-                    squareTurn[6] = turnSide;
-                }
-                if (squareTurn[6]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2 - 120, 400);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2 - 120, 400);
-                }
-            }
-            if (IconTab[7] == 1) {
-                if (squareTurn[7] == null) {
-                    squareTurn[7] = turnSide;
-                }
-                if (squareTurn[7]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2, 400);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2, 400);
-                }
-            }
-            if (IconTab[8] == 1) {
-                if (squareTurn[8] == null) {
-                    squareTurn[8] = turnSide;
-                }
-                if (squareTurn[8]) {
-                    ctx.fillStyle = xColor;
-                    ctx.fillText("X", cw / 2 + 120, 400);
-                } else {
-                    ctx.fillStyle = oColor;
-                    ctx.fillText("O", cw / 2 + 120, 400);
-                }
-            }
-        }
+
 
 
 
@@ -562,6 +626,7 @@
 
 
         function goBack() {
+            console.log("back !");
             stage = 1;
             IconTab = [0, 0, 0, 0, 0, 0, 0, 0, 0];
             squareTurn = [null, null, null, null, null, null, null, null, null];
@@ -617,10 +682,10 @@
                 //player vs player
                 drawBackIcon();
                 gameBoard();
-                //drawIcon();
+                drawIcon();
                 topMenu();
                 showScore();
-                // checkWin();
+                 checkWin();
             } else // stage == 3
             {
                 console.log("------------STAGE 3-------------");
